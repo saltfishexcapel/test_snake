@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/example/snake">
+    <file>snake-interface.ui</file>
+    <file>../data/picture/apple.png</file>
+    <file>../data/picture/none.png</file>
+    <file>../data/picture/snake_body.png</file>
+    <file>../data/picture/snake_head.png</file>
+  </gresource>
+</gresources>
