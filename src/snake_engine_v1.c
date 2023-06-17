@@ -49,6 +49,7 @@ snake_init (Snake* snake)
                 return;
         snake->snake_head = snake->snake_end = NULL;
         snake->snake_length                  = 0;
+        snake->old_orien = snake->now_orien = SNAKE_ORIENTATION_UP;
 }
 
 Snake*
@@ -65,6 +66,23 @@ snake_destory (Snake* snake)
 {
         if (snake != NULL)
                 free (snake);
+}
+
+void
+snake_set_orientation (Snake* snake, SnakeOrientation orien)
+{
+        if (snake != NULL) {
+                snake->old_orien = snake->now_orien;
+                snake->now_orien = orien;
+        }
+}
+
+SnakeOrientation
+snake_get_orientation (Snake* snake)
+{
+        if (snake != NULL)
+                return snake->now_orien;
+        return SNAKE_ORIENTATION_UP;
 }
 
 void
@@ -121,6 +139,13 @@ snake_set_next_orientation (Snake* snake, SnakeOrientation orien)
         if (snake == NULL)
                 return SNAKE_STATUS_ERROR;
 
+        /*掉头不会倒转方向，不会死*/
+        if (((snake->now_orien + snake->old_orien) == 1) ||
+            ((snake->now_orien + snake->old_orien) == 5)) {
+                orien = snake->old_orien;
+                snake->now_orien = snake->old_orien;
+        }
+
         /*先判断下个方向的情况：无情况或蛇身或苹果*/
         switch (orien) {
         case SNAKE_ORIENTATION_DOWN:
@@ -156,7 +181,7 @@ snake_set_next_orientation (Snake* snake, SnakeOrientation orien)
                 return SNAKE_STATUS_APPLE;
         } else
                 snake_move (snake, next_s_unit);
-        
+
         return SNAKE_STATUS_ALIVE;
 }
 

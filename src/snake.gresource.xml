@@ -5,6 +5,9 @@
     <file>../data/picture/apple.png</file>
     <file>../data/picture/none.png</file>
     <file>../data/picture/snake_body.png</file>
-    <file>../data/picture/snake_head.png</file>
+    <file>../data/picture/snake_head_up.png</file>
+    <file>../data/picture/snake_head_down.png</file>
+    <file>../data/picture/snake_head_left.png</file>
+    <file>../data/picture/snake_head_right.png</file>
   </gresource>
 </gresources>

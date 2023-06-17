@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=贪吃蛇
+Comment=贪吃蛇小游戏
+Exec=snake
+Icon=/usr/share/test_snake/snake.png
+Type=Application
+Terminal=false

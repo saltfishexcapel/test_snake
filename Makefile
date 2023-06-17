@@ -2,7 +2,8 @@ C_COMPILER = /usr/bin/gcc
 C_ARGUMENTS = -Wall
 
 export INSTALL_PATH = /usr
-export INSTALL_SHARE = $(INSTALL_PATH)/share/test_snake
+export INSTALL_SHARE = $(INSTALL_PATH)/share
+export INSTALL_APPPATH = $(INSTALL_SHARE)/test_snake
 export INSTALL_BIN = $(INSTALL_PATH)/bin
 
 MKDIR = /usr/bin/mkdir
@@ -19,7 +20,7 @@ all: $(SNAKE_CONFIG)
 	cd src && $(MAKE)
 	
 $(SNAKE_CONFIG): $(CONFIG_TOOL)
-	$(CONFIG_TOOL) $(SNAKE_CONFIG) $(INSTALL_SHARE)/$(GRESOURCE_OUTFILE)
+	$(CONFIG_TOOL) $(SNAKE_CONFIG) $(INSTALL_APPPATH)/$(GRESOURCE_OUTFILE)
 
 $(CONFIG_TOOL): $(CONFIG_OBJECT)
 	$(C_COMPILER) -o $@ $^ $(C_ARGUMENTS)
@@ -29,8 +30,10 @@ $(CONFIG_OBJECT): %.o : %.c
 
 install:
 	cd src && $(MAKE) install
+	cd data && $(MAKE) install
 
 uninstall:
+	cd src && $(MAKE) uninstall
 	cd src && $(MAKE) uninstall
 
 .PHONY: clean

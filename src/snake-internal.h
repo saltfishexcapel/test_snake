@@ -19,6 +19,9 @@ extern void snake_internal_restart (GAction* action     G_GNUC_UNUSED,
 #define SNAKE_IMAGE_NONE  "/org/example/snake/../data/picture/none.png"
 #define SNAKE_IMAGE_APPLE "/org/example/snake/../data/picture/apple.png"
 #define SNAKE_IMAGE_BODY  "/org/example/snake/../data/picture/snake_body.png"
-#define SNAKE_IMAGE_HEAD  "/org/example/snake/../data/picture/snake_head.png"
+#define SNAKE_IMAGE_HEAD_UP  "/org/example/snake/../data/picture/snake_head_up.png"
+#define SNAKE_IMAGE_HEAD_DOWN  "/org/example/snake/../data/picture/snake_head_down.png"
+#define SNAKE_IMAGE_HEAD_LEFT  "/org/example/snake/../data/picture/snake_head_left.png"
+#define SNAKE_IMAGE_HEAD_RIGHT  "/org/example/snake/../data/picture/snake_head_right.png"
 
 #endif

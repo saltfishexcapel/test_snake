@@ -10,6 +10,7 @@ struct _SnakeWindow
         /*模板部件*/
         GtkHeaderBar* header_bar;
         GtkButton*    reset_button;
+        GtkFrame*     main_frame;
         GtkGrid*      main_grid;
 };
 
@@ -41,6 +42,9 @@ snake_window_class_init (SnakeWindowClass* klass)
         gtk_widget_class_bind_template_child (widget_class,
                                               SnakeWindow,
                                               main_grid);
+        gtk_widget_class_bind_template_child (widget_class,
+                                              SnakeWindow,
+                                              main_frame);
 }
 
 #define CUSTOM_MACRO_A(name, func)                 \

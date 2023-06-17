@@ -30,6 +30,7 @@ enum _SnakeStatus
         SNAKE_STATUS_DIE,
         SNAKE_STATUS_APPLE,
         SNAKE_STATUS_ERROR,
+        SNAKE_STATUS_SUSPEND,
 };
 
 struct _SUnitClass
@@ -62,10 +63,15 @@ void s_unit_set_gui (SUnit* self, void* gui_object, void (*gui_func) (SUnit*));
 
 struct _SnakeClass
 {
-        SUnit* snake_head;
-        SUnit* snake_end;
-        uint   snake_length;
+        SUnit*           snake_head;
+        SUnit*           snake_end;
+        uint             snake_length;
+        SnakeOrientation now_orien;
+        SnakeOrientation old_orien;
 };
+
+void snake_set_orientation (Snake* snake, SnakeOrientation orien);
+SnakeOrientation snake_get_orientation (Snake* snake);
 
 /*吃掉苹果，将苹果状态消除*/
 void snake_eat_apple (Snake* snake, SUnit* apple);
