@@ -310,7 +310,8 @@ snake_map_init_snake (SnakeMap* smp)
                 return;
         /*指定地图中心为蛇头位置*/
         head_x = smp->_x / 2;
-        head_y = smp->_y / 2;
+        /*从中下部分起手比较好操作*/
+        head_y = smp->_y * 2 / 3;
         snake = smp->snake = snake_new ();
 
         /*设置初始蛇*/

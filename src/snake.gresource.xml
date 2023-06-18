@@ -2,12 +2,12 @@
 <gresources>
   <gresource prefix="/org/example/snake">
     <file>snake-interface.ui</file>
-    <file>../data/picture/apple.png</file>
-    <file>../data/picture/none.png</file>
-    <file>../data/picture/snake_body.png</file>
-    <file>../data/picture/snake_head_up.png</file>
-    <file>../data/picture/snake_head_down.png</file>
-    <file>../data/picture/snake_head_left.png</file>
-    <file>../data/picture/snake_head_right.png</file>
+    <file>../data/picture/apple.xpm</file>
+    <file>../data/picture/none.xpm</file>
+    <file>../data/picture/snake_body.xpm</file>
+    <file>../data/picture/snake_head_up.xpm</file>
+    <file>../data/picture/snake_head_down.xpm</file>
+    <file>../data/picture/snake_head_left.xpm</file>
+    <file>../data/picture/snake_head_right.xpm</file>
   </gresource>
 </gresources>

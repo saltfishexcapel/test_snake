@@ -1,0 +1,13 @@
+/* XPM */
+static char * none_xpm[] = {
+"8 8 2 1",
+" 	c #FFFFFF",
+".	c #EBEBEB",
+"        ",
+"        ",
+"        ",
+"        ",
+"        ",
+"        ",
+"        ",
+".       "};

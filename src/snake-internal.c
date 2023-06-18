@@ -4,10 +4,12 @@
 
 #include <unistd.h>
 
-SnakeMap*    g_map         = NULL;
-SnakeWindow* g_self_window = NULL;
+SnakeMap*    g_map          = NULL;
+SnakeWindow* g_self_window  = NULL;
 GtkWidget*   g_reset_button = NULL;
 SnakeStatus  g_state        = SNAKE_STATUS_ALIVE;
+
+static char  title_buffer[50];
 
 gboolean
 _snake_internal_gui_func (gpointer _self)
@@ -158,18 +160,29 @@ _snake_internal_update_window_state (gpointer self G_GNUC_UNUSED)
         switch (g_state) {
         case SNAKE_STATUS_ALIVE:
         case SNAKE_STATUS_APPLE:
-                gtk_window_set_title (GTK_WINDOW (g_self_window),
-                                      "贪吃蛇-游戏中 (按空格或P暂停)");
+                snprintf (title_buffer,
+                          50,
+                          "贪吃蛇-游戏中（长度: %u）",
+                          g_map->snake->snake_length);
+                gtk_window_set_title (GTK_WINDOW (g_self_window), title_buffer);
                 gtk_widget_set_visible (g_reset_button, false);
+                gtk_button_set_label (GTK_BUTTON (g_reset_button), "重开");
                 break;
         case SNAKE_STATUS_DIE:
-                gtk_window_set_title (GTK_WINDOW (g_self_window),
-                                      "贪吃蛇-游戏结束");
+                snprintf (title_buffer,
+                          50,
+                          "游戏结束！最终长度: %u",
+                          g_map->snake->snake_length);
+                gtk_window_set_title (GTK_WINDOW (g_self_window), title_buffer);
                 gtk_widget_set_visible (g_reset_button, true);
                 break;
         case SNAKE_STATUS_SUSPEND:
-                gtk_window_set_title (GTK_WINDOW (g_self_window),
-                                      "贪吃蛇-暂停");
+                snprintf (title_buffer,
+                          50,
+                          "贪吃蛇-暂停中（长度: %u）",
+                          g_map->snake->snake_length);
+                gtk_window_set_title (GTK_WINDOW (g_self_window), title_buffer);
+                gtk_button_set_label (GTK_BUTTON (g_reset_button), "继续");
                 gtk_widget_set_visible (g_reset_button, true);
                 break;
         default:
@@ -194,11 +207,14 @@ snake_internal_auto_snake (void* data G_GNUC_UNUSED)
                                 g_map->snake->now_orien);
                         if (g_state == SNAKE_STATUS_APPLE)
                                 snake_map_set_apple (g_map);
+                        g_idle_add (_snake_internal_update_window_state, NULL);
                         usleep (200000);
                         /*刷新标题*/
                         g_idle_add (_snake_internal_update_window_state, NULL);
                 }
                 usleep (100000);
+                /*刷新标题*/
+                g_idle_add (_snake_internal_update_window_state, NULL);
         }
 }
 
@@ -233,8 +249,15 @@ snake_internal_restart (GAction* action     G_GNUC_UNUSED,
                         SnakeWindow*        self)
 {
         GtkGrid* grid;
-        g_state = SNAKE_STATUS_SUSPEND;
-        grid = GTK_GRID (gtk_widget_get_template_child (GTK_WIDGET (self),
+
+        /*若当前为暂停状态，则此函数起取消暂停的作用*/
+        if (g_state == SNAKE_STATUS_SUSPEND) {
+                g_state = SNAKE_STATUS_ALIVE;
+                return;
+        }
+
+        g_state = SNAKE_STATUS_DIE;
+        grid    = GTK_GRID (gtk_widget_get_template_child (GTK_WIDGET (self),
                                                         SNAKE_TYPE_WINDOW,
                                                         "main_grid"));
         // g_print ("重开\n");
