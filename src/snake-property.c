@@ -445,7 +445,8 @@ re_open:
                 if (!_dp)
                         break;
                 /*检测文件是否为 . 和 ..*/
-                if (_dp->d_name[0] == '.' && (_dp->d_name[1] == '\0' || _dp->d_name[1] == '.'))
+                if (_dp->d_name[0] == '.' &&
+                    (_dp->d_name[1] == '\0' || _dp->d_name[1] == '.'))
                         continue;
                 memset (buffer, 0, 1024);
                 cptr = buffer;
@@ -509,7 +510,11 @@ snake_property_add_prty_file (SnakeProperty* prty, const char* prty_name)
         snake_prty_file_set_file_path_name (tmp, buffer);
         snake_prty_file_bdata_write (tmp);
 
-        prty->end->next = tmp;
-        prty->end       = tmp;
+        if (prty->end == NULL) {
+                prty->head = prty->end = tmp;
+        } else {
+                prty->end->next = tmp;
+                prty->end       = tmp;
+        }
         return tmp;
 }
