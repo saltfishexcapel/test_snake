@@ -1,8 +1,11 @@
 #include "snake-internal.h"
 
+#include "snake-property.h"
 #include "snake_engine_v1.h"
 
 #include <unistd.h>
+
+#define MAP_SIZE 38
 
 SnakeMap*    g_map          = NULL;
 SnakeWindow* g_self_window  = NULL;
@@ -70,8 +73,8 @@ snake_internal_init_gui (SnakeWindow* self)
                                                            SNAKE_TYPE_WINDOW,
                                                            "main_grid"));
 
-        for (int y = 0; y < 30; ++y)
-                for (int x = 0; x < 30; ++x) {
+        for (int y = 0; y < MAP_SIZE; ++y)
+                for (int x = 0; x < MAP_SIZE; ++x) {
                         /*初始化：载入空白图形*/
                         image = gtk_image_new_from_resource (SNAKE_IMAGE_NONE);
                         /*将空白图形添加到 x y 处*/
@@ -117,11 +120,16 @@ snake_internal_keyboard_catch (GtkWidget* widget, gpointer data G_GNUC_UNUSED)
                 snake_set_orientation (g_map->snake, SNAKE_ORIENTATION_DOWN);
                 break;
         case 33:
-        case 65:
-                g_state = (g_state == SNAKE_STATUS_SUSPEND
-                                   ? SNAKE_STATUS_ALIVE
-                                   : SNAKE_STATUS_SUSPEND);
+        case 65: {
+                /*游戏结束或产生错误后不能继续进行操作*/
+                if (g_state != SNAKE_STATUS_DIE &&
+                    g_state != SNAKE_STATUS_ERROR) {
+                        g_state = (g_state == SNAKE_STATUS_SUSPEND
+                                           ? SNAKE_STATUS_ALIVE
+                                           : SNAKE_STATUS_SUSPEND);
+                }
                 break;
+        }
         default:
                 g_print ("未定义按键: %u\n", code);
                 break;
@@ -152,6 +160,7 @@ gboolean
 _snake_internal_update_window_state (gpointer self G_GNUC_UNUSED)
 {
         static SnakeStatus old_state = SNAKE_STATUS_SUSPEND;
+        SnakeRecUnit*      rec_unit;
 
         /*若当前状态与旧的状态一致，就不执行以下操作了*/
         if (old_state == g_state)
@@ -168,11 +177,15 @@ _snake_internal_update_window_state (gpointer self G_GNUC_UNUSED)
                 gtk_widget_set_visible (g_reset_button, false);
                 gtk_button_set_label (GTK_BUTTON (g_reset_button), "重开");
                 break;
+        /*游戏结束，向记录器记录游戏结果*/
         case SNAKE_STATUS_DIE:
                 snprintf (title_buffer,
                           50,
                           "游戏结束！最终长度: %u",
                           g_map->snake->snake_length);
+                rec_unit = snake_rec_unit_create (g_map->snake->snake_length,
+                                                  (ulong)time (NULL));
+                snake_recorder_add_rec_unit (global_recorder, rec_unit);
                 gtk_window_set_title (GTK_WINDOW (g_self_window), title_buffer);
                 gtk_widget_set_visible (g_reset_button, true);
                 break;
@@ -230,7 +243,7 @@ snake_internal_init (SnakeWindow* self)
 
         /*初始化引擎*/
         g_map = snake_map_new ();
-        snake_map_alloc_map_with_xy (g_map, 30, 30);
+        snake_map_alloc_map_with_xy (g_map, MAP_SIZE, MAP_SIZE);
         snake_map_related_uint (g_map);
 
         /*初始化地图部件*/
@@ -266,7 +279,7 @@ snake_internal_restart (GAction* action     G_GNUC_UNUSED,
                 gtk_grid_remove_row (grid, 0);
 
         g_map = snake_map_new ();
-        snake_map_alloc_map_with_xy (g_map, 30, 30);
+        snake_map_alloc_map_with_xy (g_map, MAP_SIZE, MAP_SIZE);
         snake_map_related_uint (g_map);
         snake_internal_init_gui (self);
         snake_map_init_snake (g_map);

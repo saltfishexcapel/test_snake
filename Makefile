@@ -36,7 +36,10 @@ uninstall:
 	cd src && $(MAKE) uninstall
 	cd src && $(MAKE) uninstall
 
+test:
+	cd src && $(MAKE) test_debug
+
 .PHONY: clean
 clean:
-	$(RM) -v $(SNAKE_CONFIG) $(CONFIG_OBJECT) $(CONFIG_TOOL)
+	$(RM) -v -f $(SNAKE_CONFIG) $(CONFIG_OBJECT) $(CONFIG_TOOL)
 	cd src && $(MAKE) clean

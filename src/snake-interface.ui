@@ -10,6 +10,12 @@
                         <property name="action-name">win.game_restart</property>
                     </object>
                 </child>
+                <child type="end">
+                    <object class="GtkMenuButton">
+                        <property name="icon-name">open-menu-symbolic</property>
+                        <property name="menu-model">primary_menu</property>
+                    </object>
+                </child>
             </object>
         </child>
         <child>
@@ -23,4 +29,17 @@
             </object>
         </child>
     </template>
+
+    <menu id="primary_menu">
+        <section>
+            <item>
+                <attribute name="label">统计数据</attribute>
+                <attribute name="action">win.statistics</attribute>
+            </item>
+            <item>
+                <attribute name="label">关于</attribute>
+                <attribute name="action">app.about</attribute>
+            </item>
+        </section>
+    </menu>
 </interface>
